@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import java.awt.CardLayout;
 
@@ -114,4 +115,5 @@ public class MenuPrincipal extends JFrame {
 	    desktopPane.add(frmListaCliente);
 	    frmListaCliente.setVisible(true);
 	}
+
 }
