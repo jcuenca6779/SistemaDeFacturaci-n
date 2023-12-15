@@ -1,4 +1,4 @@
-package edu.ec.puce;
+package edu.ec.puce.Formulario;
 
 
 
@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import edu.ec.puce.Dominio.Producto;
 
 public class FrmProducto extends JInternalFrame {
 

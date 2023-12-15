@@ -1,4 +1,4 @@
-package edu.ec.puce;
+package edu.ec.puce.Formulario;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
@@ -14,6 +14,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import edu.ec.puce.Dominio.Cliente;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

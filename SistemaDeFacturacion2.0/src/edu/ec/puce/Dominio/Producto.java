@@ -1,4 +1,4 @@
-package edu.ec.puce;
+package edu.ec.puce.Dominio;
 
 public class Producto {
 	private String idProducto;

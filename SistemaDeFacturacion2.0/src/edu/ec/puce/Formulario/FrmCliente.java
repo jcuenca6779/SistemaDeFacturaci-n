@@ -1,9 +1,10 @@
-package edu.ec.puce;
+package edu.ec.puce.Formulario;
 
 
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -11,10 +12,17 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+
+import edu.ec.puce.Dominio.Cliente;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ListSelectionModel;
 
 public class FrmCliente extends JInternalFrame {
 
@@ -27,11 +35,16 @@ public class FrmCliente extends JInternalFrame {
 	private JTextField txtDireccion;
 	private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 	private JButton btnGuardar;
+	private JButton btnEliminar;
+	private JButton btnActualizar;
 	private JTable table;
 	private DefaultTableModel model;
+	private List<Cliente>listaClientes;
+	private boolean bandera = true;
 
 	
-	public FrmCliente() {
+	public FrmCliente(List<Cliente> clientelist) {
+		this.listaClientes = clientes != null ? clientes : new ArrayList<>();
 		setTitle("Agregar Clientes");
 		setBounds(100, 100, 450, 500);
 		getContentPane().setLayout(null);
@@ -100,18 +113,24 @@ public class FrmCliente extends JInternalFrame {
 		btnNuevo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpiarCampos();
+				table.clearSelection();
+				bandera=true;
+				btnGuardar.setVisible(bandera);
+				btnEliminar.setEnabled(false);
+				btnActualizar.setVisible(false);
 			}
 		});
-		btnNuevo.setBounds(45, 274, 90, 23);
+		btnNuevo.setBounds(10, 274, 90, 23);
 		getContentPane().add(btnNuevo);
 		
 		btnGuardar = new JButton("Guardar");
+		
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				crearCliente();
 			}
 		});
-		btnGuardar.setBounds(180, 274, 90, 23);
+		btnGuardar.setBounds(119, 274, 90, 23);
 		getContentPane().add(btnGuardar);
 		
 		JButton btnCancelar = new JButton("Cancelar");
@@ -120,14 +139,63 @@ public class FrmCliente extends JInternalFrame {
 				cerrarVentana();
 			}
 		});
-		btnCancelar.setBounds(315, 274, 89, 23);
+		btnCancelar.setBounds(339, 274, 89, 23);
 		getContentPane().add(btnCancelar);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(45, 308, 359, 140);
+		scrollPane.setBounds(20, 308, 408, 140);
 		getContentPane().add(scrollPane);
 		
+		btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int dialogResult=JOptionPane.showConfirmDialog(null, "¿Estas seguro?", "Confirme", JOptionPane.YES_NO_OPTION);
+				int filaSeleccionada = table.getSelectedRow();
+				if(dialogResult==JOptionPane.YES_OPTION) {
+					if (filaSeleccionada >= 0) {
+						model.removeRow(filaSeleccionada);
+						btnActualizar.setVisible(false);
+						btnEliminar.setEnabled(false);
+						btnGuardar.setVisible(true);
+					}
+					if (filaSeleccionada < listaClientes.size()) {
+						listaClientes.remove(filaSeleccionada);
+					}
+				}
+				else 
+					{System.out.println("No");
+			}
+			}
+		});
+		btnEliminar.setEnabled(false);
+		btnEliminar.setBounds(226, 274, 90, 23);
+		getContentPane().add(btnEliminar);
+		
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+
+			public void mouseClicked(MouseEvent e) {
+				int filaSeleccionada = table.getSelectedRow();
+				if (filaSeleccionada >= 0) {
+					String cedula = table.getValueAt(filaSeleccionada, 0).toString();
+	                String nombres = table.getValueAt(filaSeleccionada, 1).toString();
+	                String apellidos = table.getValueAt(filaSeleccionada, 2).toString();
+	                String telefono = table.getValueAt(filaSeleccionada, 3).toString();
+	                String email = table.getValueAt(filaSeleccionada, 4).toString();
+	                String direccion = table.getValueAt(filaSeleccionada, 5).toString();
+	                txtCedula.setText(cedula);
+	                txtNombres.setText(nombres);
+	                txtApellidos.setText(apellidos);
+	                txtTelefono.setText(telefono);
+	                txtEmail.setText(email);
+	                txtDireccion.setText(direccion);
+					bandera=false;
+					btnGuardar.setVisible(bandera);
+					btnEliminar.setEnabled(true);
+					btnActualizar.setVisible(true);
+				}
+			}
+		});
 		table.setBackground(new Color(192, 192, 192));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -137,6 +205,34 @@ public class FrmCliente extends JInternalFrame {
 			}
 		));
 		scrollPane.setViewportView(table);
+		
+		btnActualizar = new JButton("Actualizar");
+		btnActualizar.setVisible(false);
+		btnActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int filaSeleccionada = table.getSelectedRow();
+				if (filaSeleccionada >= 0) {
+				 String cedula = txtCedula.getText();
+		            String nombres = txtNombres.getText();
+		            String apellidos = txtApellidos.getText();
+		            String telefono = txtTelefono.getText();
+		            String email = txtEmail.getText();
+		            String direccion = txtDireccion.getText();
+
+		         
+		            model.setValueAt(cedula, filaSeleccionada, 0);
+		            model.setValueAt(nombres, filaSeleccionada, 1);
+		            model.setValueAt(apellidos, filaSeleccionada, 2);
+		            model.setValueAt(telefono, filaSeleccionada, 3);
+		            model.setValueAt(email, filaSeleccionada, 4);
+		            model.setValueAt(direccion, filaSeleccionada, 5);
+				}
+			}
+		});
+		btnActualizar.setBounds(119, 275, 90, 23);
+		getContentPane().add(btnActualizar);
+		
+		
 		model = (DefaultTableModel) table.getModel();
 
 	}
@@ -165,6 +261,7 @@ public class FrmCliente extends JInternalFrame {
 				);
 		clientes.add(cliente);
 		agregarFila();
+		limpiarCampos();
 	}
 	
 	private void agregarFila() {
@@ -176,6 +273,8 @@ public class FrmCliente extends JInternalFrame {
 		fila[4]= clientes.get(clientes.size()-1).getEmail();
 		fila[5]= clientes.get(clientes.size()-1).getDireccion();
 		this.model.addRow(fila);
+		listaClientes.addAll(clientes);
+		
 	}
 	
 	public static ArrayList<Cliente> getClientes() {

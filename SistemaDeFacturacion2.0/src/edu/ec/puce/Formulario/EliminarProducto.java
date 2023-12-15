@@ -1,4 +1,4 @@
-package edu.ec.puce;
+package edu.ec.puce.Formulario;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;
@@ -20,6 +20,8 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultTextUI;
+
+import edu.ec.puce.Dominio.Producto;
 
 public class EliminarProducto extends JDialog {
 
